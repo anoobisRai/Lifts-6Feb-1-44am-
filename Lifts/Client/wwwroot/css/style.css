@@ -1,0 +1,115 @@
+﻿
+body {
+    min-height: 100vh;
+    width: 100%;
+    background-color: #000;
+    background-image: url(https://64.media.tumblr.com/f8f10a67c119090bb263d7ad364279d4/tumblr_nnbuiu7MIj1s1vn29o1_500.gifv);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 60%;
+    color: #fff;
+    font-family: Poppins;
+}
+
+button {
+    background: #393939;
+    border: 0;
+    outline: none;
+    padding: 15px 35px;
+    color: #fff;
+    margin-top: 20px;
+    letter-spacing: 1px;
+}
+
+.right {
+    position: absolute;
+    right: 5%;
+}
+.left {
+    position: absolute;
+    left: 16%;
+    bottom: 150px;
+}
+
+.right-bottom {
+    position: absolute;
+    right: 8%;
+    bottom: 38%;
+    display: flex;
+}
+.slider {
+    width: 300px;
+    height: 200px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.slides{
+    width: 500%;
+    height:200px;
+    display: flex;
+}
+.slides input{
+    display: none;
+}
+
+.slide{
+    width:20%;
+    transition:4s;
+}
+.navigation-manual {
+    position: absolute;
+    width: 300px;
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;    
+}
+.manual-btn {
+    border: 2px solid #fff;
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 1s;
+}
+.manual-btn:not(:last-child) {
+    margin-right: 40px;
+}
+.manual-btn:hover{
+    background: #ffffff;
+}
+#radio1:checked ~ .first{
+    margin-left: 0;
+}
+
+#radio2:checked ~ .first {
+    margin-left: -20%;
+}
+
+#radio3:checked ~ .first {
+    margin-left: -40%;
+}
+.navigation-auto{
+    position: absolute;
+    width: 300px;
+    margin-top: 200px;
+    display: flex;
+    justify-content: center;
+}
+.navigation-auto div{
+    border: 2px solid #fff;
+    padding: 5px;
+    border-radius: 10px;
+    cursor:pointer;
+    transition: 3s;
+}
+.navigation-auto div:not(:last-child){
+    margin-right:40px;
+}
+#radio1:checked ~ .navigation-auto .auto-btn1{
+    background:#000;
+}
+#radio2:checked ~ .navigation-auto .auto-btn2 {
+    background: #000;
+}
+#radio3:checked ~ .navigation-auto .auto-btn3 {
+    background: #000;
+}

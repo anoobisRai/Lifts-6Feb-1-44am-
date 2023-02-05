@@ -1,0 +1,57 @@
+﻿@page "/"
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lifts Transport Booking</title>
+    <link href="css/style.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="right">
+        <h1>Lifts, <br />Your reliable transport</h1>
+        <NavLink class="nav-link" href="Book">
+            <button type="submit" href="/Book.razor">Book Now &#x2190;</button>
+        </NavLink>
+</div>
+
+    <div class="right-bottom">
+        <div class="slider">
+            <div class="slides">
+                <input type="radio" name="radio-btn" id="radio1" />
+                <input type="radio" name="radio-btn" id="radio2" />
+                <input type="radio" name="radio-btn" id="radio3" />
+                <div class="slide first">
+                    <img src="https://i.ibb.co/ZTtxcc0/image.png" alt="img1" width="300" height="188" />
+                </div>
+                <div class="slide">
+                    <img src="https://data.whicdn.com/images/319245408/original.jpg" alt="img2" width="300" height="188" />
+                </div>
+                <div class="slide">
+                    <img src="https://www.carshowroom.com.au/media/21507750/2019-toyota-prius-hybrid-01-1118.jpg" alt="img3" width="300" height="188" />
+                </div>
+
+                <div class="navigation-auto">
+                    <div class="auto-btn1"></div>
+                    <div class="auto-btn2"></div>
+                    <div class="auto-btn3"></div>
+                </div>
+            </div>
+            <div class="navigation-manual">
+                <label for="radio1" class="manual-btn"></label>
+                <label for="radio2" class="manual-btn"></label>
+                <label for="radio3" class="manual-btn"></label>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="left">
+        <h5>Find out what we do and more</h5>
+        <NavLink class="nav-link" href="OurVehicle">
+            <button type="submit">About us &#x2192;</button>
+        </NavLink>
+    </div>
+</body>
+</html>
+

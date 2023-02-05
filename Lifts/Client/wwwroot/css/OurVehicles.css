@@ -1,0 +1,54 @@
+﻿
+body {
+    min-height: 100vh;
+    width: 100%;
+    background-color: #000;
+    background-image: url(https://64.media.tumblr.com/f8f10a67c119090bb263d7ad364279d4/tumblr_nnbuiu7MIj1s1vn29o1_500.gifv);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 60%;
+    color: #fff;
+    font-family: Poppins;
+}
+
+button {
+    background: #393939;
+    border: 0;
+    outline: none;
+    padding: 15px 35px;
+    color: #fff;
+    margin-top: 20px;
+    letter-spacing: 1px;
+}
+
+.heading-h1 {
+    text-align: center;
+    padding: 10px;
+}
+
+img {
+    width: 30%;
+    height: auto;
+    padding: 23px;
+}
+
+.car-label {
+    position: absolute;
+    top: 25%;
+    left: 40%;
+    padding: 1px;
+}
+
+.van-label {
+    position: absolute;
+    top: 55%;
+    left: 40%;
+    padding: 1px;
+}
+
+.coach-label {
+    position: absolute;
+    top: 85%;
+    left: 40%;
+    padding: 1px;
+}
