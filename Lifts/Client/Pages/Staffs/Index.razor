@@ -4,6 +4,12 @@
 @attribute [Authorize]
 
 <h3> Staff </h3>
+<a href="/Staffs/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New Staff
+</a>
+<br />
+<br />
 
 @if (Staffs == null)
 {
@@ -14,6 +20,8 @@ else
     <thead>
         <tr>
             <th>Name</th>
+            <th>Number</th>
+            <th>Email</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -21,20 +29,23 @@ else
         @foreach (var Staff in Staffs)
         {
 <tr>
-    <td>@Staff.StaffName</td>
     <td>
-        <a href="/Staffs/view/@Staff.Id" class="btn btn-primary">
-            <span class="oi oi-book"></span>
-        </a>
-        <a href="/Staffs/edit/@Staff.Id" class="btn btn-warning">
-            <span class="oi oi-pencil"></span>
-        </a>
-        <button class="btn btn-danger" @onclick="@(()=>Delete(Staff.Id))">
-            <span class="oi oi-delete"></span>
-        </button>
-    </td>
-</tr>
-}
+        @Staff.StaffName
+</td>
+<td>@Staff.StaffContactNumber</td>
+<td>@Staff.StaffEmail</td>
+<td>
+    <a href="/Staffs/view/@Staff.Id" class="btn btn-primary">
+        <span class="oi oi-book"></span>
+    </a>
+    <a href="/Staffs/edit/@Staff.Id" class="btn btn-warning">
+        <span class="oi oi-pencil"></span>
+    </a>
+    <button class="btn btn-danger" @onclick="@(()=>Delete(Staff.Id))">
+        <span class="oi oi-delete"></span>
+    </button>
+</td>
+</tr>}
     </tbody>
 </table>}
 

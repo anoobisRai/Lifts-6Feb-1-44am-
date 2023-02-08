@@ -13,7 +13,7 @@ namespace Lifts.Client.Static
         public static readonly string CustomersEndpoint = $"{Prefix}/Customers";
         public static readonly string PaymentsEndpoint = $"{Prefix}/Payments";
         public static readonly string StaffsEndpoint = $"{Prefix}/Staffs";
-        public static readonly string VehiclesEndpoint = $"{Prefix}/Vehicles";
+        public static readonly string VehiclesEndpoint = $"{Prefix}/vehicles";
         public static readonly string VehicleBrandsEndpoint = $"{Prefix}/VehicleBrands";
         public static readonly string VehicleSeatersEndpoint = $"{Prefix}/VehicleSeaters";
         public static readonly string VehicleTypesEndpoint = $"{Prefix}/VehicleTypes";

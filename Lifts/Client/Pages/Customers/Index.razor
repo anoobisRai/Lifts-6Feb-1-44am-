@@ -4,7 +4,12 @@
 @attribute [Authorize]
 
 <h3> Customer </h3>
-
+<a href="/Customers/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New Customer
+</a>
+<br />
+<br />
 @if (Customers == null)
 {
 <div class="alert alert-info">Loading Users...</div>}
@@ -14,6 +19,9 @@ else
     <thead>
         <tr>
             <th>Name</th>
+            <th>Number</th>
+            <th>Email</th>
+            <th>License</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -22,6 +30,9 @@ else
         {
 <tr>
     <td>@Customer.CustomerName</td>
+    <td>@Customer.CustomerContactNumber</td>
+    <td>@Customer.CustomerEmail</td>
+    <td>@Customer.CustomerLicense</td>
     <td>
         <a href="/Customers/view/@Customer.Id" class="btn btn-primary">
             <span class="oi oi-book"></span>
@@ -33,24 +44,25 @@ else
             <span class="oi oi-delete"></span>
         </button>
     </td>
-</tr>}
+</tr>
+}
     </tbody>
 </table>}
 
 @code { private List<Customer> Customers;
 
-            protected async override Task OnInitializedAsync()
-            {
-                Customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
-            }
+    protected async override Task OnInitializedAsync()
+    {
+        Customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
+    }
 
-            async Task Delete(int CustomerID)
-            {
-                var Customer = Customers.First(q => q.Id == CustomerID);
-                var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {Customer.CustomerName}?");
-                if (confirm)
-                {
-                    await _client.DeleteAsync($"{Endpoints.CustomersEndpoint}/{CustomerID}");
-                    await OnInitializedAsync();
-                }
-            } }
+    async Task Delete(int CustomerID)
+    {
+        var Customer = Customers.First(q => q.Id == CustomerID);
+        var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {Customer.CustomerName}?");
+        if (confirm)
+        {
+            await _client.DeleteAsync($"{Endpoints.CustomersEndpoint}/{CustomerID}");
+            await OnInitializedAsync();
+        }
+    } }

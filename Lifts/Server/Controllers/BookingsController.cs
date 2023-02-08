@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Lifts.Server.Data;
-using Lifts.Shared.Domain;
 using Lifts.Server.IRepository;
+using Lifts.Shared.Domain;
 
 namespace Lifts.Server.Controllers
 {
@@ -32,9 +32,11 @@ namespace Lifts.Server.Controllers
         public async Task<IActionResult> GetBookings()
         {
             //return await _context.Bookings.ToListAsync();
-            var Bookings = await _unitOfWork.Booking.GetAll(includes: q => q.Include(x => x.Customer).Include(x => x.Staff).Include(x => x.Vehicle));
+            var Bookings = await _unitOfWork.Bookings.GetAll();
             return Ok(Bookings);
         }
+
+
 
         // GET: api/Bookings/5
         [HttpGet("{id}")]
@@ -42,7 +44,7 @@ namespace Lifts.Server.Controllers
         //
         public async Task<IActionResult> GetBookings(int id)
         {
-            var Bookings = await _unitOfWork.Booking.Get(q => q.Id == id);
+            var Bookings = await _unitOfWork.Bookings.Get(q => q.Id == id);
 
             if (Bookings == null)
             {
@@ -66,7 +68,7 @@ namespace Lifts.Server.Controllers
             //
 
             //_context.Entry(Bookings).State = EntityState.Modified;
-            _unitOfWork.Booking.Update(Bookings);
+            _unitOfWork.Bookings.Update(Bookings);
 
             try
             {
@@ -97,7 +99,7 @@ namespace Lifts.Server.Controllers
             //_context.Bookings.Add(Bookings);
             //await _context.SaveChangesAsync();
 
-            await _unitOfWork.Booking.Insert(Bookings);
+            await _unitOfWork.Bookings.Insert(Bookings);
             await _unitOfWork.Save(HttpContext);
 
             return CreatedAtAction("GetBookings", new { id = Bookings.Id }, Bookings);
@@ -107,7 +109,7 @@ namespace Lifts.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBookings(int id)
         {
-            var Bookings = await _unitOfWork.Booking.Get(q => q.Id == id);
+            var Bookings = await _unitOfWork.Bookings.Get(q => q.Id == id);
             if (Bookings == null)
             {
                 return NotFound();
@@ -116,7 +118,7 @@ namespace Lifts.Server.Controllers
             //
             //_context.Bookings.Remove(Bookings);
             //await _context.SaveChangesAsync();
-            await _unitOfWork.Booking.Delete(id);
+            await _unitOfWork.Bookings.Delete(id);
             await _unitOfWork.Save(HttpContext);
 
             return NoContent();
@@ -128,7 +130,7 @@ namespace Lifts.Server.Controllers
             //
             //return _context.Bookings.Any(e => e.Id == id);
 
-            var Bookings = await _unitOfWork.Booking.GetAll();
+            var Bookings = await _unitOfWork.Bookings.GetAll();
             return Bookings != null;
         }
     }

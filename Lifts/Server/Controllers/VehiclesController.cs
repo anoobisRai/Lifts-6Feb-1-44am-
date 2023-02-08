@@ -8,38 +8,35 @@ using Microsoft.EntityFrameworkCore;
 using Lifts.Server.Data;
 using Lifts.Shared.Domain;
 using Lifts.Server.IRepository;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Lifts.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
-    public class VehicleController : ControllerBase
+    public class VehiclesController : ControllerBase
     {
-        //Refractored
-        //private readonly
         private readonly IUnitOfWork _unitOfWork;
-
-        //public VehicleController(ApplicationDbContext context)
-        public VehicleController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public VehiclesController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment,
+            IHttpContextAccessor httpContextAccessor)
         {
             _unitOfWork = unitOfWork;
+            this._webHostEnvironment = webHostEnvironment;
+            this._httpContextAccessor = httpContextAccessor;
         }
 
-        // GET: api/Vehicle
+        // GET: /Vehicles
         [HttpGet]
-        //refractored
-        public async Task<IActionResult> GetVehicle()
+        public async Task<IActionResult> GetVehicles()
         {
-            //return await _context.Bookings.ToListAsync();
-            var Vehicle = await _unitOfWork.Booking.GetAll(includes: q => q.Include(x => x.Customer).Include(x => x.Staff).Include(x => x.Vehicle));
-            return Ok(Vehicle);
+            var Vehicles = await _unitOfWork.Vehicles.GetAll();
+            return Ok(Vehicles);
         }
 
-        // GET: api/Vehicle/5
+        // GET: /Vehicles/5
         [HttpGet("{id}")]
-        //refractored
-        //
         public async Task<IActionResult> GetVehicle(int id)
         {
             var Vehicle = await _unitOfWork.Vehicles.Get(q => q.Id == id);
@@ -49,61 +46,24 @@ namespace Lifts.Server.Controllers
                 return NotFound();
             }
 
-            //
             return Ok(Vehicle);
         }
 
-        // PUT: api/Vehicle/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutVehicle(int id, Vehicle Vehicle)
+        // GET: /Vehicles/5/details
+        [HttpGet("{id}/details")]
+        public async Task<IActionResult> GetVehicleDetails(int id)
         {
-            if (id != Vehicle.Id)
+            var Vehicle = await _unitOfWork.Vehicles.Get(q => q.Id == id);
+
+            if (Vehicle == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            //
-
-            //_context.Entry(Vehicle).State = EntityState.Modified;
-            _unitOfWork.Vehicles.Update(Vehicle);
-
-            try
-            {
-                await _unitOfWork.Save(HttpContext);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                //
-                //if (!VehicleExists(id))
-                if (!await VehicleExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
+            return Ok(Vehicle);
         }
 
-        // POST: api/Vehicle
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Vehicle>> PostVehicle(Vehicle Vehicle)
-        {
-            //_context.Vehicle.Add(Vehicle);
-            //await _context.SaveChangesAsync();
-
-            await _unitOfWork.Vehicles.Insert(Vehicle);
-            await _unitOfWork.Save(HttpContext);
-
-            return CreatedAtAction("GetVehicle", new { id = Vehicle.Id }, Vehicle);
-        }
-
-        // DELETE: api/Vehicle/5
+        // DELETE: api/Vehicles/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVehicle(int id)
         {
@@ -112,24 +72,26 @@ namespace Lifts.Server.Controllers
             {
                 return NotFound();
             }
-
-            //
-            //_context.Bookings.Remove(Bookings);
-            //await _context.SaveChangesAsync();
             await _unitOfWork.Vehicles.Delete(id);
             await _unitOfWork.Save(HttpContext);
 
             return NoContent();
         }
-        //
-        //
+
+        private string CreateFile(byte[] image, string name)
+        {
+            var url = _httpContextAccessor.HttpContext.Request.Host.Value;
+            var path = $"{_webHostEnvironment.WebRootPath}\\uploads\\{name}";
+            var fileStream = System.IO.File.Create(path);
+            fileStream.Write(image, 0, image.Length);
+            fileStream.Close();
+            return $"https://{url}/uploads/{name}";
+        }
+
         private async Task<bool> VehicleExists(int id)
         {
-            //
-            //return _context.Vehicle.Any(e => e.Id == id);
-
-            var Vehicle = await _unitOfWork.Vehicles.GetAll();
-            return Vehicle != null;
+            var Vehicle = await _unitOfWork.Vehicles.Get(q => q.Id == id);
+            return Vehicle == null;
         }
     }
 }

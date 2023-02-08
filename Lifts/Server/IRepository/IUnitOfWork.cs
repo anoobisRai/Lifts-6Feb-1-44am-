@@ -10,7 +10,7 @@ namespace Lifts.Server.IRepository
     public interface IUnitOfWork : IDisposable
     {
         Task Save(HttpContext httpContext);
-        IGenericRepository<Booking> Booking { get; }
+        IGenericRepository<Booking> Bookings { get; }
         IGenericRepository<Customer> Customers { get; }
         IGenericRepository<Payment> Payments { get; }
         IGenericRepository<Staff> Staffs { get; }

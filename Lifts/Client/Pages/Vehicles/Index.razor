@@ -1,5 +1,70 @@
-﻿<h3>Index</h3>
+﻿@page "/Vehicle/"
+@inject HttpClient _client
+@inject IJSRuntime js
+@attribute [Authorize]
 
-@code {
+<h3> Vehicle </h3>
+<a href="/vehicles/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New Vehicle
+</a>
+<br />
+<br />
 
-}
+@if (Vehicles == null)
+{
+<div class="alert alert-info">Loading Users...</div>}
+else
+{
+<table class="table table-responsive">
+    <thead>
+        <tr>
+            <th>Vehicle Id</th>
+            <th>Plate</th>
+            <th>Type</th>
+            <th>Seater</th>
+            <th>Brand</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Vehicle in Vehicles)
+        {
+<tr>
+    <td>@Vehicle.Id</td>
+    <td>@Vehicle.Plate</td>
+    <td>@Vehicle.Type.TypeName</td>
+    <td>@Vehicle.Seater.SeaterNumber</td>
+    <td>@Vehicle.Brand.BrandName</td>
+    <td>
+        <a href="/Vehicles/view/@Vehicle.Id" class="btn btn-primary">
+            <span class="oi oi-book"></span>
+        </a>
+        <a href="/Vehicles/edit/@Vehicle.Id" class="btn btn-warning">
+            <span class="oi oi-pencil"></span>
+        </a>
+        <button class="btn btn-danger" @onclick="@(()=>Delete(Vehicle.Id))">
+            <span class="oi oi-delete"></span>
+        </button>
+    </td>
+</tr>}
+    </tbody>
+</table>}
+
+@code { private List<Vehicle> Vehicles;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Vehicles = await _client.GetFromJsonAsync<List<Vehicle>>($"{Endpoints.VehiclesEndpoint}");
+    }
+
+    async Task Delete(int VehicleID)
+    {
+        var Vehicle = Vehicles.First(q => q.Id == VehicleID);
+        var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {Vehicle.Id}?");
+        if (confirm)
+        {
+            await _client.DeleteAsync($"{Endpoints.VehiclesEndpoint}/{VehicleID}");
+            await OnInitializedAsync();
+        }
+    } }

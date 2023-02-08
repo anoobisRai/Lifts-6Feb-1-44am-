@@ -1,0 +1,32 @@
+﻿@page "/VehicleTypes/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 class="card-title">Create New Vehicle Type</h3>
+<hr />
+<br />
+
+<EditForm Model="@vehicleType" OnValidSubmit="CreateVehicleType">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label>Type: </label>
+        <div>
+            <InputText @bind-Value="@vehicleType.TypeName" class="form-control" />
+            <ValidationMessage For="@(() => vehicleType.TypeName)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Create VehicleType
+    </button>
+</EditForm>
+
+@code { VehicleType vehicleType = new VehicleType();
+
+    private async Task CreateVehicleType()
+    {
+        await _client.PostAsJsonAsync(Endpoints.VehicleTypesEndpoint, vehicleType);
+        _navManager.NavigateTo("/vehicleType/");
+    } }

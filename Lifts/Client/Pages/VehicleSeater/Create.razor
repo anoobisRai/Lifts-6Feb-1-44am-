@@ -1,0 +1,32 @@
+﻿@page "/VehicleSeaters/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3 class="card-title">Create New Vehicle Seater</h3>
+<hr />
+<br />
+
+<EditForm Model="@vehicleSeater" OnValidSubmit="CreateVehicleSeater">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label>Number of Seats: </label>
+        <div>
+            <InputNumber @bind-Value="@vehicleSeater.SeaterNumber" class="form-control" />
+            <ValidationMessage For="@(() => vehicleSeater.SeaterNumber)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Create VehicleSeater
+    </button>
+</EditForm>
+
+@code { VehicleSeater vehicleSeater = new VehicleSeater();
+
+    private async Task CreateVehicleSeater()
+    {
+        await _client.PostAsJsonAsync(Endpoints.VehicleSeatersEndpoint, vehicleSeater);
+        _navManager.NavigateTo("/vehicleSeater/");
+    } }

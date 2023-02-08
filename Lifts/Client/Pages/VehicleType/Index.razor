@@ -4,6 +4,12 @@
 @attribute [Authorize]
 
 <h3>Car Vehicle Types</h3>
+<a href="/VehicleTypes/create" class="btn btn-secondary">
+    <span class="oi oi-plus"></span>
+    Create New VehicleType
+</a>
+<br />
+<br />
 
 @if (Types == null)
 {
@@ -33,8 +39,7 @@ else
             <span class="oi oi-delete"></span>
         </button>
     </td>
-</tr>
-}
+</tr>}
     </tbody>
 </table>}
 
