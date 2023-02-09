@@ -17,6 +17,8 @@
 else
 {
 <table class="table table-responsive">
+    <div class="bg-dark">
+        <div class="text-white">
     <thead>
         <tr>
             <th>Booking Id</th>
@@ -32,28 +34,30 @@ else
     <tbody>
         @foreach (var Booking in Bookings)
         {
-<tr>
-    <td>@Booking.Id</td>
-    <td>@Booking.Customer.CustomerName</td>
-    <td>@Booking.Customer.CustomerLicense</td>
-    <td>@Booking.BookingDate.Date.ToString("dd MMMM yyyy")</td>
-    <td>@Booking.StartDate.Date.ToString("dd MMMM yyyy")</td>
-    <td>@Booking.Vehicle.Plate</td>
-    <td>@Booking.Staff.StaffName </td>
-    <td>
-        <a href="/Bookings/view/@Booking.Id" class="btn btn-primary">
-            <span class="oi oi-book"></span>
-        </a>
-        <a href="/Bookings/edit/@Booking.Id" class="btn btn-warning">
-            <span class="oi oi-pencil"></span>
-        </a>
-        <button class="btn btn-danger" @onclick="@(()=>Delete(Booking.Id))">
-            <span class="oi oi-delete"></span>
-        </button>
-    </td>
-</tr>
-}
+            <tr>
+                <td>@Booking.Id</td>
+                <td>@Booking.Customer.CustomerName</td>
+                <td>@Booking.Customer.CustomerLicense</td>
+                <td>@Booking.BookingDate.Date.ToString("dd MMMM yyyy")</td>
+                <td>@Booking.StartDate.Date.ToString("dd MMMM yyyy")</td>
+                <td>@Booking.Vehicle.Plate</td>
+                <td>@Booking.Staff.StaffName </td>
+                <td>
+                    <a href="/Bookings/view/@Booking.Id" class="btn btn-primary">
+                        <span class="oi oi-book"></span>
+                    </a>
+                    <a href="/Bookings/edit/@Booking.Id" class="btn btn-warning">
+                        <span class="oi oi-pencil"></span>
+                    </a>
+                    <button class="btn btn-danger" @onclick="@(()=>Delete(Booking.Id))">
+                        <span class="oi oi-delete"></span>
+                    </button>
+                </td>
+            </tr>
+        }
     </tbody>
+    </div>
+    </div>
 </table>}
 
 @code { private List<Booking> Bookings;

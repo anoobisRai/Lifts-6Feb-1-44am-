@@ -1,0 +1,22 @@
+﻿@page "/Types/edit/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+
+<h3>Edit Vehicle Type</h3>
+<FormComponent ButtonText="Update" OnValidSubmit="EditVehicleType" vehicleType="vehicleType" />
+
+@code {
+    [Parameter] public int id { get; set; }
+    VehicleType vehicleType = new VehicleType();
+
+    protected async override Task OnParametersSetAsync()
+    {
+        vehicleType = await _client.GetFromJsonAsync<VehicleType>($"{Endpoints.VehicleTypesEndpoint}/{id}");
+    }
+
+    async Task EditVehicleType()
+    {
+        await _client.PutAsJsonAsync($"{Endpoints.VehicleTypesEndpoint}/{id}", vehicleType);
+        _navManager.NavigateTo("/VehicleType/");
+    }
+}

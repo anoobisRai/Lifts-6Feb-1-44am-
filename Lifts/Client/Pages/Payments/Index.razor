@@ -18,6 +18,8 @@
 else
 {
 <table class="table table-responsive">
+    <div class="bg-dark">
+        <div class="text-white">
     <thead>
         <tr>
             <th>Payment Id</th>
@@ -28,23 +30,26 @@ else
     <tbody>
         @foreach (var Payment in Payments)
         {
-<tr>
-    <td>@Payment.Id</td>
-    <td>@Payment.PaymentAmount</td>
-    <td>@Payment.PaymentTransaction</td>
-    <td>
-        <a href="/Payments/view/@Payment.Id" class="btn btn-primary">
-            <span class="oi oi-book"></span>
-        </a>
-        <a href="/Payments/edit/@Payment.Id" class="btn btn-warning">
-            <span class="oi oi-pencil"></span>
-        </a>
-        <button class="btn btn-danger" @onclick="@(()=>Delete(Payment.Id))">
-            <span class="oi oi-delete"></span>
-        </button>
-    </td>
-</tr>}
+            <tr>
+                <td>@Payment.Id</td>
+                <td>@Payment.PaymentAmount</td>
+                <td>@Payment.PaymentTransaction</td>
+                <td>
+                    <a href="/Payments/view/@Payment.Id" class="btn btn-primary">
+                        <span class="oi oi-book"></span>
+                    </a>
+                    <a href="/Payments/edit/@Payment.Id" class="btn btn-warning">
+                        <span class="oi oi-pencil"></span>
+                    </a>
+                    <button class="btn btn-danger" @onclick="@(()=>Delete(Payment.Id))">
+                        <span class="oi oi-delete"></span>
+                    </button>
+                </td>
+            </tr>
+}
     </tbody>
+    </div>
+    </div>
 </table>}
 
 @code { private List<Payment> Payments;

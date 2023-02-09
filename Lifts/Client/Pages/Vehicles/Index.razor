@@ -17,6 +17,8 @@
 else
 {
 <table class="table table-responsive">
+    <div class="bg-dark">
+        <div class="text-white">
     <thead>
         <tr>
             <th>Vehicle Id</th>
@@ -30,25 +32,28 @@ else
     <tbody>
         @foreach (var Vehicle in Vehicles)
         {
-<tr>
-    <td>@Vehicle.Id</td>
-    <td>@Vehicle.Plate</td>
-    <td>@Vehicle.Type.TypeName</td>
-    <td>@Vehicle.Seater.SeaterNumber</td>
-    <td>@Vehicle.Brand.BrandName</td>
-    <td>
-        <a href="/Vehicles/view/@Vehicle.Id" class="btn btn-primary">
-            <span class="oi oi-book"></span>
-        </a>
-        <a href="/Vehicles/edit/@Vehicle.Id" class="btn btn-warning">
-            <span class="oi oi-pencil"></span>
-        </a>
-        <button class="btn btn-danger" @onclick="@(()=>Delete(Vehicle.Id))">
-            <span class="oi oi-delete"></span>
-        </button>
-    </td>
-</tr>}
+            <tr>
+                <td>@Vehicle.Id</td>
+                <td>@Vehicle.Plate</td>
+                <td>@Vehicle.Type.TypeName</td>
+                <td>@Vehicle.Seater.SeaterNumber</td>
+                <td>@Vehicle.Brand.BrandName</td>
+                <td>
+                    <a href="/Vehicles/view/@Vehicle.Id" class="btn btn-primary">
+                        <span class="oi oi-book"></span>
+                    </a>
+                    <a href="/Vehicles/edit/@Vehicle.Id" class="btn btn-warning">
+                        <span class="oi oi-pencil"></span>
+                    </a>
+                    <button class="btn btn-danger" @onclick="@(()=>Delete(Vehicle.Id))">
+                        <span class="oi oi-delete"></span>
+                    </button>
+                </td>
+            </tr>
+}
     </tbody>
+    </div>
+    </div>
 </table>}
 
 @code { private List<Vehicle> Vehicles;

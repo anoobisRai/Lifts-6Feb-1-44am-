@@ -1,0 +1,21 @@
+﻿<EditForm Model="@vehicleBrand" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label>Brand: </label>
+        <div>
+            <InputText @bind-Value="@vehicleBrand.BrandName" class="form-control" />
+            <ValidationMessage For="@(() => vehicleBrand.BrandName)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        @ButtonText
+    </button>
+</EditForm>
+@code{
+    [Parameter] public VehicleBrand vehicleBrand { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}
