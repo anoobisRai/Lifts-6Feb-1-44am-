@@ -26,7 +26,7 @@
     <div class="form-group">
         <label>Start Time: </label>
         <div>
-            <InputDate @bind-Value="@booking.StartTime" class="form-control" />
+            <InputText @bind-Value="@booking.StartTime" class="form-control" />
             <ValidationMessage For="@(() => booking.BookingDate)" />
         </div>
     </div>
@@ -34,7 +34,7 @@
     <div class="form-group">
         <label>End Time: </label>
         <div>
-            <InputDate @bind-Value="@booking.EndTime" class="form-control" />
+            <InputText @bind-Value="@booking.EndTime" class="form-control" />
             <ValidationMessage For="@(() => booking.EndTime)" />
         </div>
     </div>
@@ -42,7 +42,7 @@
     <div class="form-group">
         <label>Customer: </label>
         <div>
-            <InputSelect @bind-Value="@booking.CustomersId" class="form-control">
+            <InputSelect @bind-Value="@booking.CustomerId" class="form-control">
                 <option value="">-- Select --</option>
                 @if (Customers != null)
                 {
@@ -52,7 +52,7 @@
                     }
                 }
             </InputSelect>
-            <ValidationMessage For="@(() => booking.CustomersId)" />
+            <ValidationMessage For="@(() => booking.CustomerId)" />
         </div>
     </div>
 

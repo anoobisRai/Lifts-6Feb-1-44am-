@@ -13,7 +13,7 @@
 
 @if (Bookings == null)
 {
-<div class="alert alert-info">Loading Users...</div>}
+<div class="alert alert-info">Loading Bookings...</div>}
 else
 {
 <table class="table table-responsive">
@@ -25,9 +25,6 @@ else
             <th>BookingDate</th>
             <th>StartDate</th>
             <th>Plate</th>
-            <th>Type</th>
-            <th>Brand</th>
-            <th>Seater</th>
             <th>StaffName</th>
             <th>Actions</th>
         </tr>
@@ -42,9 +39,6 @@ else
     <td>@Booking.BookingDate.Date.ToString("dd MMMM yyyy")</td>
     <td>@Booking.StartDate.Date.ToString("dd MMMM yyyy")</td>
     <td>@Booking.Vehicle.Plate</td>
-    <td>@Booking.Vehicle.Type</td>
-    <td>@Booking.Vehicle.Brand</td>
-    <td>@Booking.Vehicle.Seater</td>
     <td>@Booking.Staff.StaffName </td>
     <td>
         <a href="/Bookings/view/@Booking.Id" class="btn btn-primary">

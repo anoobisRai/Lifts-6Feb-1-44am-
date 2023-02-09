@@ -197,7 +197,7 @@ namespace Lifts.Server.Migrations
                         {
                             Id = "3781efa7-66dc-47f0-860f-e506d04102e4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d161417b-e77b-4b81-b682-e033ff649f05",
+                            ConcurrencyStamp = "0f19b117-5cfb-4157-a305-3954c60f5eeb",
                             Email = "admin@localhost.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
@@ -205,9 +205,9 @@ namespace Lifts.Server.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGmUYpyXvc2p6VvJPMx6rvy1tuav4YkGml4UHsqmOes/c6XMiCj4mugma9U+LDWVPw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECT1O4BJ3tb4KxJ8eXzgF4aY58NEjGBjqmvMKVcyB8c1ooweK5Rc2f9apVs+Q9WnUg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "3d5ecce4-e7c6-40cd-9dc2-838f69d570dd",
+                            SecurityStamp = "1e90c0ae-6caa-4cf1-a840-7ffaf5e9c339",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });
@@ -223,14 +223,11 @@ namespace Lifts.Server.Migrations
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CustomerId")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CustomersId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("EndTime")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StaffId")
                         .HasColumnType("int");
@@ -238,8 +235,8 @@ namespace Lifts.Server.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("StartTime")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("VehicleID")
                         .HasColumnType("int");
@@ -323,8 +320,8 @@ namespace Lifts.Server.Migrations
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("PaymentTime")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("PaymentTime")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentTransaction")
                         .HasColumnType("nvarchar(max)");
@@ -539,14 +536,14 @@ namespace Lifts.Server.Migrations
                         new
                         {
                             Id = "ad2bcf0c-20db-474f-8407-5a6b159518ba",
-                            ConcurrencyStamp = "2db281bb-2c9f-4306-b9d8-cf01e2c2f62e",
+                            ConcurrencyStamp = "0adb9c35-a5cf-46ea-ab85-68febcc15013",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "bd2bcf0c-20db-474f-8407-5a6b159518bb",
-                            ConcurrencyStamp = "f09b3f72-19a8-4c8d-bde7-822a3052b148",
+                            ConcurrencyStamp = "ab16ec28-219c-478b-a86e-838ce7d95175",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -671,7 +668,9 @@ namespace Lifts.Server.Migrations
                 {
                     b.HasOne("Lifts.Shared.Domain.Customer", "Customer")
                         .WithMany("Booking")
-                        .HasForeignKey("CustomerId");
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Lifts.Shared.Domain.Staff", "Staff")
                         .WithMany("Booking")

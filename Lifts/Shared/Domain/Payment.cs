@@ -12,7 +12,7 @@ namespace Lifts.Shared.Domain
 
         public DateTime PaymentDate { get; set; }
 
-        public DateTime PaymentTime { get; set; }
+        public string PaymentTime { get; set; }
 
         public string PaymentTransaction { get; set; }
 

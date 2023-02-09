@@ -309,10 +309,9 @@ namespace Lifts.Server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BookingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CustomersId = table.Column<int>(type: "int", nullable: false),
-                    CustomerId = table.Column<int>(type: "int", nullable: true),
+                    StartTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EndTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CustomerId = table.Column<int>(type: "int", nullable: false),
                     VehicleID = table.Column<int>(type: "int", nullable: false),
                     StaffId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -324,7 +323,7 @@ namespace Lifts.Server.Migrations
                         column: x => x.CustomerId,
                         principalTable: "Customers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Bookings_Staffs_StaffId",
                         column: x => x.StaffId,
@@ -347,7 +346,7 @@ namespace Lifts.Server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PaymentAmount = table.Column<int>(type: "int", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PaymentTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaymentTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PaymentTransaction = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BookingID = table.Column<int>(type: "int", nullable: false)
                 },
@@ -367,14 +366,14 @@ namespace Lifts.Server.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "ad2bcf0c-20db-474f-8407-5a6b159518ba", "2db281bb-2c9f-4306-b9d8-cf01e2c2f62e", "Administrator", "ADMINISTRATOR" },
-                    { "bd2bcf0c-20db-474f-8407-5a6b159518bb", "f09b3f72-19a8-4c8d-bde7-822a3052b148", "User", "USER" }
+                    { "ad2bcf0c-20db-474f-8407-5a6b159518ba", "0adb9c35-a5cf-46ea-ab85-68febcc15013", "Administrator", "ADMINISTRATOR" },
+                    { "bd2bcf0c-20db-474f-8407-5a6b159518bb", "ab16ec28-219c-478b-a86e-838ce7d95175", "User", "USER" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "3781efa7-66dc-47f0-860f-e506d04102e4", 0, "d161417b-e77b-4b81-b682-e033ff649f05", "admin@localhost.com", false, "Admin", "User", false, null, "ADMIN@LOCALHOST.COM", "ADMIN", "AQAAAAEAACcQAAAAEGmUYpyXvc2p6VvJPMx6rvy1tuav4YkGml4UHsqmOes/c6XMiCj4mugma9U+LDWVPw==", null, false, "3d5ecce4-e7c6-40cd-9dc2-838f69d570dd", false, "Admin" });
+                values: new object[] { "3781efa7-66dc-47f0-860f-e506d04102e4", 0, "0f19b117-5cfb-4157-a305-3954c60f5eeb", "admin@localhost.com", false, "Admin", "User", false, null, "ADMIN@LOCALHOST.COM", "ADMIN", "AQAAAAEAACcQAAAAECT1O4BJ3tb4KxJ8eXzgF4aY58NEjGBjqmvMKVcyB8c1ooweK5Rc2f9apVs+Q9WnUg==", null, false, "1e90c0ae-6caa-4cf1-a840-7ffaf5e9c339", false, "Admin" });
 
             migrationBuilder.InsertData(
                 table: "Brands",

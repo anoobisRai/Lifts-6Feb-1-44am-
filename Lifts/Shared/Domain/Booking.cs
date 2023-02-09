@@ -10,9 +10,9 @@ namespace Lifts.Shared.Domain
     {
         public DateTime BookingDate { get; set; }
         public DateTime StartDate { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public int CustomersId { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
+        public int CustomerId { get; set; }
         public virtual Customer Customer { get; set; }
         public int VehicleID { get; set; }
         public virtual Vehicle Vehicle { get; set; }
