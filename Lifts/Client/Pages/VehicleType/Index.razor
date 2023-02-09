@@ -2,6 +2,9 @@
 @inject HttpClient _client
 @inject IJSRuntime js
 @attribute [Authorize]
+@inject HttpInterceptorService _interceptor
+@implements IDisposable
+
 
 <h3>Car Vehicle Types</h3>
 <a href="/VehicleTypes/create" class="btn btn-secondary">
@@ -13,45 +16,48 @@
 
 @if (Types == null)
 {
-<div class="alert alert-info">Loading Types...</div>}
+    <div class="alert alert-info">Loading Types...</div>}
 else
-{
-<table class="table table-responsive">
-    <div class="bg-dark">
-        <div class="text-white">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var vehicleType in Types)
-        {
-            <tr>
-                <td>@vehicleType.TypeName</td>
-                <td>
-                    <a href="/Types/view/@vehicleType.Id" class="btn btn-primary">
-                        <span class="oi oi-book"></span>
-                    </a>
-                    <a href="/Types/edit/@vehicleType.Id" class="btn btn-warning">
-                        <span class="oi oi-pencil"></span>
-                    </a>
-                    <button class="btn btn-danger" @onclick="@(()=>Delete(vehicleType.Id))">
-                        <span class="oi oi-delete"></span>
-                    </button>
-                </td>
-            </tr>
-}
-    </tbody>
-    </div>
-    </div>
-</table>}
+{ <div class="bg-dark">
+      <div class="text-white">
+          <table class="table table-responsive" id="bookingsTable">
 
-@code { private List<VehicleType> Types;
+              <thead>
+                  <tr>
+                      <th>Name</th>
+                      <th>Actions</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  @foreach (var vehicleType in Types)
+                  {
+                      <tr>
+                          <td>@vehicleType.TypeName</td>
+                          <td>
+                              <a href="/Types/view/@vehicleType.Id" class="btn btn-primary">
+                                  <span class="oi oi-book"></span>
+                              </a>
+                              <a href="/Types/edit/@vehicleType.Id" class="btn btn-warning">
+                                  <span class="oi oi-pencil"></span>
+                              </a>
+                              <button class="btn btn-danger" @onclick="@(() => Delete(vehicleType.Id))">
+                                  <span class="oi oi-delete"></span>
+                              </button>
+                          </td>
+                      </tr>
+                  }
+              </tbody>
+          </table>
+      </div>
+</div>
+}
+
+@code {
+    private List<VehicleType> Types;
 
     protected async override Task OnInitializedAsync()
     {
+        _interceptor.MonitorEvent();
         Types = await _client.GetFromJsonAsync<List<VehicleType>>($"{Endpoints.VehicleTypesEndpoint}");
     }
 
@@ -64,4 +70,16 @@ else
             await _client.DeleteAsync($"{Endpoints.VehicleTypesEndpoint}/{VehicleTypeId}");
             await OnInitializedAsync();
         }
-    } }
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await js.InvokeVoidAsync("AddDataTable", "#bookingsTable");
+    }
+
+    public void Dispose()
+    {
+        _interceptor.DisposeEvent();
+        js.InvokeVoidAsync("AddDataTable", "#bookingsTable");
+    }
+}

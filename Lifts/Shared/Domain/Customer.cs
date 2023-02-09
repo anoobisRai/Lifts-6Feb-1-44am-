@@ -20,7 +20,6 @@ namespace Lifts.Shared.Domain
         [DataType(DataType.PhoneNumber)]
         public int CustomerContactNumber { get; set; }
         [Required]
-        [RegularExpression(@"^[A-Za-z]{3}\d{4}[A-Za-z]", ErrorMessage = "License Plate Number does not meet requirements")]
         public string CustomerLicense { get; set; }
         [Required]
         [DataType(DataType.EmailAddress)]

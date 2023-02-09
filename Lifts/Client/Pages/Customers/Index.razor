@@ -2,7 +2,8 @@
 @inject HttpClient _client
 @inject IJSRuntime js
 @attribute [Authorize]
-
+@inject HttpInterceptorService _interceptor
+@implements IDisposable
 <h3> Customer </h3>
 <a href="/Customers/create" class="btn btn-secondary">
     <span class="oi oi-plus"></span>
@@ -12,58 +13,74 @@
 <br />
 @if (Customers == null)
 {
-<div class="alert alert-info">Loading Users...</div>}
+    <div class="alert alert-info">Loading Users...</div>}
 else
 {
-<table class="table table-responsive">
+    <div class="bg-dark">
+        <div class="text-white">
+            <table class="table table-responsive" id="bookingsTable">
 
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Number</th>
-            <th>Email</th>
-            <th>License</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var Customer in Customers)
-        {
-<tr>
-    <td>@Customer.CustomerName</td>
-    <td>@Customer.CustomerContactNumber</td>
-    <td>@Customer.CustomerEmail</td>
-    <td>@Customer.CustomerLicense</td>
-    <td>
-        <a href="/Customers/view/@Customer.Id" class="btn btn-primary">
-            <span class="oi oi-book"></span>
-        </a>
-        <a href="/Customers/edit/@Customer.Id" class="btn btn-warning">
-            <span class="oi oi-pencil"></span>
-        </a>
-        <button class="btn btn-danger" @onclick="@(()=>Delete(Customer.Id))">
-            <span class="oi oi-delete"></span>
-        </button>
-    </td>
-</tr>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Number</th>
+                        <th>Email</th>
+                        <th>License</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var Customer in Customers)
+                    {
+                        <tr>
+                            <td>@Customer.CustomerName</td>
+                            <td>@Customer.CustomerContactNumber</td>
+                            <td>@Customer.CustomerEmail</td>
+                            <td>@Customer.CustomerLicense</td>
+                            <td>
+                                <a href="/Customers/view/@Customer.Id" class="btn btn-primary">
+                                    <span class="oi oi-book"></span>
+                                </a>
+                                <a href="/Customers/edit/@Customer.Id" class="btn btn-warning">
+                                    <span class="oi oi-pencil"></span>
+                                </a>
+                                <button class="btn btn-danger" @onclick="@(() => Delete(Customer.Id))">
+                                    <span class="oi oi-delete"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>}
+            </div>
+        </div>
 }
-    </tbody>
-</table>}
 
-@code { private List<Customer> Customers;
+            @code { private List<Customer> Customers;
 
-    protected async override Task OnInitializedAsync()
-    {
-        Customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
-    }
+            protected async override Task OnInitializedAsync()
+            {
+                Customers = await _client.GetFromJsonAsync<List<Customer>>($"{Endpoints.CustomersEndpoint}");
+            }
 
-    async Task Delete(int CustomerID)
-    {
-        var Customer = Customers.First(q => q.Id == CustomerID);
-        var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {Customer.CustomerName}?");
-        if (confirm)
-        {
-            await _client.DeleteAsync($"{Endpoints.CustomersEndpoint}/{CustomerID}");
-            await OnInitializedAsync();
-        }
-    } }
+            async Task Delete(int CustomerID)
+            {
+                var Customer = Customers.First(q => q.Id == CustomerID);
+                var confirm = await js.InvokeAsync<bool>("confirm", $"Do you want to delete {Customer.CustomerName}?");
+                if (confirm)
+                {
+                    await _client.DeleteAsync($"{Endpoints.CustomersEndpoint}/{CustomerID}");
+                    await OnInitializedAsync();
+                }
+            }
+            protected async override Task OnAfterRenderAsync(bool firstRender)
+            {
+                await js.InvokeVoidAsync("AddDataTable", "#bookingsTable");
+            }
+
+            public void Dispose()
+            {
+                _interceptor.DisposeEvent();
+                js.InvokeVoidAsync("AddDataTable", "#bookingsTable");
+            }
+            }

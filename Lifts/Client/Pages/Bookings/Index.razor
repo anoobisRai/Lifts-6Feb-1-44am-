@@ -2,7 +2,8 @@
 @inject HttpClient _client
 @inject IJSRuntime js
 @attribute [Authorize]
-
+@inject HttpInterceptorService _interceptor
+@implements IDisposable
 <h3> Booking </h3>
 <a href="/Bookings/create" class="btn btn-secondary">
     <span class="oi oi-plus"></span>
@@ -13,52 +14,54 @@
 
 @if (Bookings == null)
 {
-<div class="alert alert-info">Loading Bookings...</div>}
+    <div class="alert alert-info">Loading Bookings...</div>}
 else
 {
-<table class="table table-responsive">
     <div class="bg-dark">
         <div class="text-white">
-    <thead>
-        <tr>
-            <th>Booking Id</th>
-            <th>CustomerName</th>
-            <th>License</th>
-            <th>BookingDate</th>
-            <th>StartDate</th>
-            <th>Plate</th>
-            <th>StaffName</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var Booking in Bookings)
-        {
-            <tr>
-                <td>@Booking.Id</td>
-                <td>@Booking.Customer.CustomerName</td>
-                <td>@Booking.Customer.CustomerLicense</td>
-                <td>@Booking.BookingDate.Date.ToString("dd MMMM yyyy")</td>
-                <td>@Booking.StartDate.Date.ToString("dd MMMM yyyy")</td>
-                <td>@Booking.Vehicle.Plate</td>
-                <td>@Booking.Staff.StaffName </td>
-                <td>
-                    <a href="/Bookings/view/@Booking.Id" class="btn btn-primary">
-                        <span class="oi oi-book"></span>
-                    </a>
-                    <a href="/Bookings/edit/@Booking.Id" class="btn btn-warning">
-                        <span class="oi oi-pencil"></span>
-                    </a>
-                    <button class="btn btn-danger" @onclick="@(()=>Delete(Booking.Id))">
-                        <span class="oi oi-delete"></span>
-                    </button>
-                </td>
-            </tr>
-        }
-    </tbody>
+            <table class="table table-responsive" id="bookingsTable">
+
+                <thead>
+                    <tr>
+                        <th>Booking Id</th>
+                        <th>CustomerName</th>
+                        <th>License</th>
+                        <th>BookingDate</th>
+                        <th>StartDate</th>
+                        <th>Plate</th>
+                        <th>StaffName</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var Booking in Bookings)
+                    {
+                        <tr>
+                            <td>@Booking.Id</td>
+                            <td>@Booking.Customer.CustomerName</td>
+                            <td>@Booking.Customer.CustomerLicense</td>
+                            <td>@Booking.BookingDate.Date.ToString("dd MMMM yyyy")</td>
+                            <td>@Booking.StartDate.Date.ToString("dd MMMM yyyy")</td>
+                            <td>@Booking.Vehicle.Plate</td>
+                            <td>@Booking.Staff.StaffName </td>
+                            <td>
+                                <a href="/Bookings/view/@Booking.Id" class="btn btn-primary">
+                                    <span class="oi oi-book"></span>
+                                </a>
+                                <a href="/Bookings/edit/@Booking.Id" class="btn btn-warning">
+                                    <span class="oi oi-pencil"></span>
+                                </a>
+                                <button class="btn btn-danger" @onclick="@(() => Delete(Booking.Id))">
+                                    <span class="oi oi-delete"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
-    </div>
-</table>}
+}
 
 @code { private List<Booking> Bookings;
 
@@ -76,4 +79,16 @@ else
             await _client.DeleteAsync($"{Endpoints.BookingsEndpoint}/{BookingID}");
             await OnInitializedAsync();
         }
-    } }
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await js.InvokeVoidAsync("AddDataTable", "#bookingsTable");
+    }
+
+    public void Dispose()
+    {
+        _interceptor.DisposeEvent();
+        js.InvokeVoidAsync("AddDataTable", "#bookingsTable");
+    }
+}

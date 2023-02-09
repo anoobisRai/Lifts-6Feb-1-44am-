@@ -2,6 +2,8 @@
 @inject HttpClient _client
 @inject IJSRuntime js
 @attribute [Authorize]
+@inject HttpInterceptorService _interceptor
+@implements IDisposable
 
 <h3>Car Vehicle Seaters</h3>
 <a href="/VehicleSeaters/create" class="btn btn-secondary">
@@ -13,40 +15,43 @@
 
 @if (Seaters == null)
 {
-<div class="alert alert-info">Loading Seaters...</div>}
+    <div class="alert alert-info">Loading Seaters...</div>}
 else
 {
-<table class="table table-responsive">
     <div class="bg-dark">
         <div class="text-white">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var vehicleSeater in Seaters)
-        {
-            <tr>
-                <td>@vehicleSeater.SeaterNumber</td>
-                <td>
-                    <a href="/Seaters/view/@vehicleSeater.Id" class="btn btn-primary">
-                        <span class="oi oi-book"></span>
-                    </a>
-                    <a href="/Seaters/edit/@vehicleSeater.Id" class="btn btn-warning">
-                        <span class="oi oi-pencil"></span>
-                    </a>
-                    <button class="btn btn-danger" @onclick="@(()=>Delete(vehicleSeater.Id))">
-                        <span class="oi oi-delete"></span>
-                    </button>
-                </td>
-            </tr>
+            <table class="table table-responsive" id="bookingsTable">
+
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var vehicleSeater in Seaters)
+                    {
+                        <tr>
+                            <td>@vehicleSeater.SeaterNumber</td>
+                            <td>
+                                <a href="/Seaters/view/@vehicleSeater.Id" class="btn btn-primary">
+                                    <span class="oi oi-book"></span>
+                                </a>
+                                <a href="/Seaters/edit/@vehicleSeater.Id" class="btn btn-warning">
+                                    <span class="oi oi-pencil"></span>
+                                </a>
+                                <button class="btn btn-danger" @onclick="@(()=>Delete(vehicleSeater.Id))">
+                                    <span class="oi oi-delete"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 }
-    </tbody>
-    </div>
-    </div>
-</table>}
 
 @code { private List<VehicleSeater> Seaters;
 
@@ -64,4 +69,16 @@ else
             await _client.DeleteAsync($"{Endpoints.VehicleSeatersEndpoint}/{vehicleSeaterId}");
             await OnInitializedAsync();
         }
-    } }
+    }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        await js.InvokeVoidAsync("AddDataTable", "#bookingsTable");
+    }
+
+    public void Dispose()
+    {
+        _interceptor.DisposeEvent();
+        js.InvokeVoidAsync("AddDataTable", "#bookingsTable");
+    }
+}
