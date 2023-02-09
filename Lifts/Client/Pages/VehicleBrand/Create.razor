@@ -6,22 +6,7 @@
 <hr />
 <br />
 
-<EditForm Model="@vehicleBrand" OnValidSubmit="CreateVehicleBrand">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-
-    <div class="form-group">
-        <label>Brand: </label>
-        <div>
-            <InputText @bind-Value="@vehicleBrand.BrandName" class="form-control" />
-            <ValidationMessage For="@(() => vehicleBrand.BrandName)" />
-        </div>
-    </div>
-
-    <button type="submit" class="btn btn-success btn-block">
-        Create VehicleBrand
-    </button>
-</EditForm>
+<FormComponent ButtonText="Create Brand" brand="brand" OnValidSubmit="@CreateVehicleBrand" />
 
 @code { VehicleBrand vehicleBrand = new VehicleBrand();
 

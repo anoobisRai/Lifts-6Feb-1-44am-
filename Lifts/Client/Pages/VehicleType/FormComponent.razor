@@ -1,19 +1,25 @@
 ﻿<EditForm Model="@vehicleType" OnValidSubmit="@OnValidSubmit">
     <DataAnnotationsValidator />
     <ValidationSummary />
+    <fieldset disabled="@Disabled">
 
-    <div class="form-group">
-        <label>Type: </label>
-        <div>
-            <InputText @bind-Value="@vehicleType.TypeName" class="form-control" />
-            <ValidationMessage For="@(() => vehicleType.TypeName)" />
+        <div class="form-group">
+            <label>Type: </label>
+            <div>
+                <InputText @bind-Value="@vehicleType.TypeName" class="form-control" />
+                <ValidationMessage For="@(() => vehicleType.TypeName)" />
+            </div>
         </div>
-    </div>
+    </fieldset>
+        @if (!Disabled)
+        {
+<button type="submit" class="btn btn-success btn-block">
+    @ButtonText
+</button>}
 
-    <button type="submit" class="btn btn-success btn-block">
-        @ButtonText
-    </button>
+        <Lifts.Client.Components.BackToList Target="VehicleType" />
 </EditForm>
 @code { [Parameter] public VehicleType vehicleType { get; set; }
-            [Parameter] public string ButtonText { get; set; } = "Save";
-            [Parameter] public EventCallback OnValidSubmit { get; set; } }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public bool Disabled { get; set; } = false;}

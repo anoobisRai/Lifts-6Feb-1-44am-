@@ -1,0 +1,14 @@
+﻿@page "/Seaters/view/{id:int}"
+@inject HttpClient _client
+@inject NavigationManager _navManager
+<h3>View</h3>
+<FormComponent seater="seater" Disabled="true" />
+@code {
+    [Parameter] public int id { get; set; }
+    VehicleSeater seater = new VehicleSeater();
+    protected async override Task OnParametersSetAsync()
+    {
+        seater = await
+        _client.GetFromJsonAsync<VehicleSeater>($"{Endpoints.VehicleSeatersEndpoint}/{id}");
+    }
+}

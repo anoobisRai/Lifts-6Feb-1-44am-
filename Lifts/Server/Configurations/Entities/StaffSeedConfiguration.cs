@@ -29,6 +29,24 @@ namespace Lifts.Server.Configurations.Entities
             StaffPassword = "1111111A",
             StaffContactNumber = 91010100,
             StaffEmail = "GwenStacy@gmail.com"
+        },
+        new Staff
+        {
+            Id = 3,
+            StaffName = "Ong Yan Lee",
+            StaffUsername = "Zalrenic Johnson",
+            StaffPassword = "2101115J",
+            StaffContactNumber = 82683263,
+            StaffEmail = "Ongyanyanz@gmail.com"
+        },
+        new Staff
+        {
+            Id = 4,
+            StaffName = "Anoobie",
+            StaffUsername = "oowie jonny",
+            StaffPassword = "2101646D",
+            StaffContactNumber = 81129750,
+            StaffEmail = "anoobiez@gmail.com"
         }
         );
         }

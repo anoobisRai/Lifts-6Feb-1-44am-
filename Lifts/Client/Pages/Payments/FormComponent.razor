@@ -1,0 +1,75 @@
+﻿@inject HttpClient _client
+
+<h3>Edit Payments</h3>
+
+<EditForm Model="@payment" OnValidSubmit="@OnValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <fieldset disabled="@Disabled">
+        <div class="form-group">
+            <label>Payment Amount: </label>
+            <div>
+                <InputNumber @bind-Value="@payment.PaymentAmount" class="form-control" />
+                <ValidationMessage For="@(() => payment.PaymentAmount)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Payment Date: </label>
+            <div>
+                <InputDate @bind-Value="@payment.PaymentDate" class="form-control" />
+                <ValidationMessage For="@(() => payment.PaymentDate)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Payment Time: </label>
+            <div>
+                <InputText @bind-Value="@payment.PaymentTime" class="form-control" />
+                <ValidationMessage For="@(() => payment.PaymentTime)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Payment Transaction: </label>
+            <div>
+                <InputText @bind-Value="@payment.PaymentTransaction" class="form-control" />
+                <ValidationMessage For="@(() => payment.PaymentTransaction)" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>BookingID: </label>
+            <div>
+                <InputSelect @bind-Value="@payment.BookingID" class="form-control">
+                    <option value="">-- Select --</option>
+                    @if (Bookings != null)
+                    {
+                        foreach (var booking in Bookings)
+                        {
+                            <option value="@booking.Id">@booking.Customer.CustomerName - @booking.Vehicle.Type - @booking.Vehicle.Plate - @booking.StartTime</option>
+                        }
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => payment.BookingID)" />
+            </div>
+        </div>
+    </fieldset>
+        @if (!Disabled)
+        {
+            <button type="submit" class="btn btn-success btn-block">
+                @ButtonText
+            </button>}
+        <Lifts.Client.Components.BackToList Target="Payment" />
+</EditForm>
+@code { [Parameter] public Payment payment { get; set; }
+    [Parameter] public string ButtonText { get; set; } = "Save";
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public bool Disabled { get; set; } = false;
+
+    private IList<Booking> Bookings;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Bookings = await _client.GetFromJsonAsync<List<Booking>>($"{Endpoints.BookingsEndpoint}");
+    } }
