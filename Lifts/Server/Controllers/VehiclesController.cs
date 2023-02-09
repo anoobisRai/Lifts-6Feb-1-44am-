@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Lifts.Server.Data;
 using Lifts.Shared.Domain;
 using Lifts.Server.IRepository;
-using Microsoft.AspNetCore.Hosting;
 
 namespace Lifts.Server.Controllers
 {
@@ -16,82 +15,126 @@ namespace Lifts.Server.Controllers
     [ApiController]
     public class VehiclesController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public VehiclesController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment,
-            IHttpContextAccessor httpContextAccessor)
+        //Refactored
+        //private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitofWork;
+        //Refactored
+
+
+        //public VehiclesController(ApplicationDbContext context)
+        public VehiclesController(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;
-            this._webHostEnvironment = webHostEnvironment;
-            this._httpContextAccessor = httpContextAccessor;
+            //Refactored
+            //_context = context;
+            _unitofWork = unitOfWork;
+
         }
 
-        // GET: /Vehicles
+        // GET: api/Vehicles
         [HttpGet]
+        //Refactored
+        //public async Task<ActionResult<IEnumerable<Vehicle>>> GetVehicles()
         public async Task<IActionResult> GetVehicles()
         {
-            var Vehicles = await _unitOfWork.Vehicles.GetAll();
-            return Ok(Vehicles);
+            //Refactored
+            //return await _context.Vehicles.ToListAsync();
+            var vehicles = await _unitofWork.Vehicles.GetAll(includes: q => q.Include(x => x.Brand).Include(x => x.Type).Include(x => x.Seater));
+            return Ok(vehicles);
         }
 
-        // GET: /Vehicles/5
+        // GET: api/Vehicles/5
         [HttpGet("{id}")]
+        //Refactored
+        //public async Task<ActionResult<Vehicle>> GetVehicle(int id)
         public async Task<IActionResult> GetVehicle(int id)
         {
-            var Vehicle = await _unitOfWork.Vehicles.Get(q => q.Id == id);
+            //var vehicle = await _context.Vehicles.FindAsync(id);
+            var vehicle = await _unitofWork.Vehicles.Get(q => q.Id == id);
 
-            if (Vehicle == null)
+            if (vehicle == null)
             {
                 return NotFound();
             }
 
-            return Ok(Vehicle);
+            return Ok(vehicle);
         }
 
-        // GET: /Vehicles/5/details
-        [HttpGet("{id}/details")]
-        public async Task<IActionResult> GetVehicleDetails(int id)
+        // PUT: api/Vehicles/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutVehicle(int id, Vehicle vehicle)
         {
-            var Vehicle = await _unitOfWork.Vehicles.Get(q => q.Id == id);
-
-            if (Vehicle == null)
+            if (id != vehicle.Id)
             {
-                return NotFound();
+                return BadRequest();
+            }
+            //Refactored
+            //_context.Entry(vehicle).State = EntityState.Modified;
+            _unitofWork.Vehicles.Update(vehicle);
+
+
+            try
+            {
+                //await _context.SaveChangesAsync();
+                await _unitofWork.Save(HttpContext);
+
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                //Refactored
+                //if (!VehicleExists(id))
+                if (!await VehicleExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
 
-            return Ok(Vehicle);
+            return NoContent();
+        }
+
+        // POST: api/Vehicles
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Vehicle>> PostVehicle(Vehicle vehicle)
+        {
+            //_context.Vehicles.Add(vehicle);
+            //await _context.SaveChangesAsync();
+            await _unitofWork.Vehicles.Insert(vehicle);
+            await _unitofWork.Save(HttpContext);
+
+
+            return CreatedAtAction("GetVehicle", new { id = vehicle.Id }, vehicle);
         }
 
         // DELETE: api/Vehicles/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVehicle(int id)
         {
-            var Vehicle = await _unitOfWork.Vehicles.Get(q => q.Id == id);
-            if (Vehicle == null)
+            //var vehicle = await _context.Vehicles.FindAsync(id);
+            var vehicle = await _unitofWork.Vehicles.Get(q => q.Id == id);
+            if (vehicle == null)
             {
                 return NotFound();
             }
-            await _unitOfWork.Vehicles.Delete(id);
-            await _unitOfWork.Save(HttpContext);
+
+            //_context.Vehicles.Remove(vehicle);
+            //await _context.SaveChangesAsync();
+            await _unitofWork.Vehicles.Delete(id);
+            await _unitofWork.Save(HttpContext);
 
             return NoContent();
         }
 
-        private string CreateFile(byte[] image, string name)
-        {
-            var url = _httpContextAccessor.HttpContext.Request.Host.Value;
-            var path = $"{_webHostEnvironment.WebRootPath}\\uploads\\{name}";
-            var fileStream = System.IO.File.Create(path);
-            fileStream.Write(image, 0, image.Length);
-            fileStream.Close();
-            return $"https://{url}/uploads/{name}";
-        }
-
+        //private bool VehicleExists(int id)
         private async Task<bool> VehicleExists(int id)
         {
-            var Vehicle = await _unitOfWork.Vehicles.Get(q => q.Id == id);
-            return Vehicle == null;
+            //return _context.Vehicles.Any(e => e.Id == id);
+            var vehicle = _unitofWork.Vehicles.Get(q => q.Id == id);
+            return vehicle != null;
         }
     }
 }

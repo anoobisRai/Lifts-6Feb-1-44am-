@@ -32,7 +32,7 @@ namespace Lifts.Server.Controllers
         public async Task<IActionResult> GetBookings()
         {
             //return await _context.Bookings.ToListAsync();
-            var Bookings = await _unitOfWork.Bookings.GetAll();
+            var Bookings = await _unitOfWork.Bookings.GetAll(includes: q => q.Include(x =>x.Customer).Include(x => x.Staff).Include(x => x.Vehicle));
             return Ok(Bookings);
         }
 

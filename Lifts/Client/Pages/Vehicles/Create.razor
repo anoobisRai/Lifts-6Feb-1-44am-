@@ -4,7 +4,7 @@
 <h3>Create Create New Vehicles</h3>
 <hr />
 <br />
-<EditForm Model="@vehicle" OnValidSubmit="CreateVehicle">
+<EditForm Model="@vehicle" OnValidSubmit="@CreateVehicle">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="form-group">
@@ -68,6 +68,7 @@
     <button type="submit" class="btn btn-success btn-block">
         Create Vehicle  
     </button>
+
 </EditForm>
 
 @code {
@@ -85,6 +86,7 @@
 
     private async Task CreateVehicle()
     {
+        
         await _client.PostAsJsonAsync(Endpoints.VehiclesEndpoint, vehicle);
         _navManager.NavigateTo("/Vehicle/");
     }

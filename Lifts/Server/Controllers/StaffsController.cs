@@ -15,79 +15,75 @@ namespace Lifts.Server.Controllers
     [ApiController]
     public class StaffsController : ControllerBase
     {
+        //Refactored
         //private readonly ApplicationDbContext _context;
-        private readonly IUnitOfWork _unitOfWork;
-        /*public CustomersController(ApplicationDbContext context)
-        {
-            _context = context;
-        }*/
+        private readonly IUnitOfWork _unitofWork;
+        //Refactored
 
+
+        //public StaffsController(ApplicationDbContext context)
         public StaffsController(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;
+            //Refactored
+            //_context = context;
+            _unitofWork = unitOfWork;
+
         }
 
         // GET: api/Staffs
-        /*[HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetStaffs()
-        {
-            return await _context.Staffs.ToListAsync();
-        }*/
         [HttpGet]
+        //Refactored
+        //public async Task<ActionResult<IEnumerable<Staff>>> GetStaffs()
         public async Task<IActionResult> GetStaffs()
         {
-            var Staffs = await _unitOfWork.Staffs.GetAll();
-            return Ok(Staffs);
+            //Refactored
+            //return await _context.Staffs.ToListAsync();
+            var staffs = await _unitofWork.Staffs.GetAll();
+            return Ok(staffs);
         }
+
         // GET: api/Staffs/5
-        //[HttpGet("{id}")]
-        /*public async Task<ActionResult<Staffs>> GetStaff(int id)
-        {
-            var Staffs = await _context.Staffs.FindAsync(id);
-
-            if (Staffs == null)
-            {
-                return NotFound();
-            }
-
-            return Staffs;
-        }*/
         [HttpGet("{id}")]
+        //Refactored
+        //public async Task<ActionResult<Staff>> GetStaff(int id)
         public async Task<IActionResult> GetStaff(int id)
         {
-            var Staff = await _unitOfWork.Staffs.Get(q => q.Id == id);
+            //var staff = await _context.Staffs.FindAsync(id);
+            var staff = await _unitofWork.Staffs.Get(q => q.Id == id);
 
-            if (Staff == null)
+            if (staff == null)
             {
                 return NotFound();
             }
 
-            return Ok(Staff);
+            return Ok(staff);
         }
-
 
         // PUT: api/Staffs/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutStaffs(int id, Staff Staff)
+        public async Task<IActionResult> PutStaff(int id, Staff staff)
         {
-            if (id != Staff.Id)
+            if (id != staff.Id)
             {
                 return BadRequest();
             }
+            //Refactored
+            //_context.Entry(staff).State = EntityState.Modified;
+            _unitofWork.Staffs.Update(staff);
 
-            //_context.Entry(Staffs).State = EntityState.Modified;
-            _unitOfWork.Staffs.Update(Staff);
 
             try
             {
                 //await _context.SaveChangesAsync();
-                await _unitOfWork.Save(HttpContext);
+                await _unitofWork.Save(HttpContext);
+
             }
             catch (DbUpdateConcurrencyException)
             {
-                //if (!StaffsExists(id))
-                if (!await StaffsExists(id))
+                //Refactored
+                //if (!StaffExists(id))
+                if (!await StaffExists(id))
                 {
                     return NotFound();
                 }
@@ -105,10 +101,12 @@ namespace Lifts.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Staff>> PostStaff(Staff Staff)
         {
-            //_context.Staffs.Add(Staffs);
+            //_context.Staffs.Add(staff);
             //await _context.SaveChangesAsync();
-            await _unitOfWork.Customers.Insert(Staff);
-            await _unitOfWork.Save(HttpContext);
+            await _unitofWork.Staffs.Insert(Staff);
+            await _unitofWork.Save(HttpContext);
+
+
             return CreatedAtAction("GetStaff", new { id = Staff.Id }, Staff);
         }
 
@@ -116,27 +114,27 @@ namespace Lifts.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteStaff(int id)
         {
-            //var Staffs = await _context.Staffs.FindAsync(id);
-            var Staff = await _unitOfWork.Staffs.Get(q => q.Id == id);
-            if (Staff == null)
+            //var staff = await _context.Staffs.FindAsync(id);
+            var staff = await _unitofWork.Staffs.Get(q => q.Id == id);
+            if (staff == null)
             {
                 return NotFound();
             }
 
-            //_context.Staffs.Remove(Staffs);
+            //_context.Staffs.Remove(staff);
             //await _context.SaveChangesAsync();
-            await _unitOfWork.Staffs.Delete(id);
-            await _unitOfWork.Save(HttpContext);
+            await _unitofWork.Staffs.Delete(id);
+            await _unitofWork.Save(HttpContext);
 
             return NoContent();
         }
 
-        //private bool CustomerExists(int id)
-        private async Task<bool> StaffsExists(int id)
+        //private bool StaffExists(int id)
+        private async Task<bool> StaffExists(int id)
         {
-            //return _context.Customers.Any(e => e.Id == id);
-            var Staff = await _unitOfWork.Staffs.Get(q => q.Id == id);
-            return Staff != null;
+            //return _context.Staffs.Any(e => e.Id == id);
+            var staff = _unitofWork.Staffs.Get(q => q.Id == id);
+            return staff != null;
         }
     }
 }

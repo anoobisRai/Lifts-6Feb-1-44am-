@@ -4,14 +4,16 @@ using Lifts.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Lifts.Server.Data.Migrations
+namespace Lifts.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230209074058_1")]
+    partial class _1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,7 +199,7 @@ namespace Lifts.Server.Data.Migrations
                         {
                             Id = "3781efa7-66dc-47f0-860f-e506d04102e4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "161ab423-40cd-4dab-816a-e737151a3857",
+                            ConcurrencyStamp = "d161417b-e77b-4b81-b682-e033ff649f05",
                             Email = "admin@localhost.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
@@ -205,9 +207,9 @@ namespace Lifts.Server.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEFnMGH3LJWVW9PyAxRaNxDw0I+pR8bwLtM5ucCF8erW8azugKWmuNKXkeO5OD/H1Kg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGmUYpyXvc2p6VvJPMx6rvy1tuav4YkGml4UHsqmOes/c6XMiCj4mugma9U+LDWVPw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "360a6e05-7a39-4555-a519-960a1394628d",
+                            SecurityStamp = "3d5ecce4-e7c6-40cd-9dc2-838f69d570dd",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });
@@ -539,14 +541,14 @@ namespace Lifts.Server.Data.Migrations
                         new
                         {
                             Id = "ad2bcf0c-20db-474f-8407-5a6b159518ba",
-                            ConcurrencyStamp = "84dfd954-b5ba-4ad8-aa67-6d697df13d9f",
+                            ConcurrencyStamp = "2db281bb-2c9f-4306-b9d8-cf01e2c2f62e",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "bd2bcf0c-20db-474f-8407-5a6b159518bb",
-                            ConcurrencyStamp = "dfde15d0-c78a-4232-aa12-6ec893ccac73",
+                            ConcurrencyStamp = "f09b3f72-19a8-4c8d-bde7-822a3052b148",
                             Name = "User",
                             NormalizedName = "USER"
                         });

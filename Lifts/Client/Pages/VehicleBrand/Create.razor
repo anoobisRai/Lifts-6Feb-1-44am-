@@ -1,5 +1,32 @@
-﻿<h3>Create</h3>
+﻿@page "/VehicleBrands/create/"
+@inject HttpClient _client
+@inject NavigationManager _navManager
 
-@code {
+<h3 class="card-title">Create New Vehicle Brand</h3>
+<hr />
+<br />
 
-}
+<EditForm Model="@vehicleBrand" OnValidSubmit="CreateVehicleBrand">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label>Brand: </label>
+        <div>
+            <InputText @bind-Value="@vehicleBrand.BrandName" class="form-control" />
+            <ValidationMessage For="@(() => vehicleBrand.BrandName)" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-block">
+        Create VehicleBrand
+    </button>
+</EditForm>
+
+@code { VehicleBrand vehicleBrand = new VehicleBrand();
+
+    private async Task CreateVehicleBrand()
+    {
+        await _client.PostAsJsonAsync(Endpoints.VehicleBrandsEndpoint, vehicleBrand);
+        _navManager.NavigateTo("/vehicleBrand/");
+    } }
