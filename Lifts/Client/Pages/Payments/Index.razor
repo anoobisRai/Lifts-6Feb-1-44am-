@@ -27,6 +27,7 @@ else
                         <th>Payment Id</th>
                         <th>Payment Amount</th>
                         <th>Payment Transaction</th>
+                        <th>Booking ID</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,6 +37,7 @@ else
                             <td>@Payment.Id</td>
                             <td>@Payment.PaymentAmount</td>
                             <td>@Payment.PaymentTransaction</td>
+                            <td>@Payment.BookingID</td>
                             <td>
                                 <a href="/Payments/view/@Payment.Id" class="btn btn-primary">
                                     <span class="oi oi-book"></span>
